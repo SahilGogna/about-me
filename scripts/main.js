@@ -15,19 +15,14 @@ function getPreferredTheme() {
 function setTheme(theme) {
   html.setAttribute('data-theme', theme);
   localStorage.setItem('theme', theme);
-  updateThemeIcon(theme);
-}
-
-// Update theme icon
-function updateThemeIcon(theme) {
-  themeToggle.textContent = theme === 'dark' ? '☀' : '☾';
 }
 
 // Initialize theme
 setTheme(getPreferredTheme());
 
 // Toggle theme on click
-themeToggle.addEventListener('click', () => {
+themeToggle.addEventListener('click', (e) => {
+  e.preventDefault();
   const currentTheme = html.getAttribute('data-theme');
   const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
   setTheme(newTheme);
@@ -40,6 +35,21 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e)
   }
 });
 
+// ===== Hamburger Menu =====
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const mainNav = document.getElementById('mainNav');
+
+hamburgerBtn.addEventListener('click', () => {
+  hamburgerBtn.classList.toggle('active');
+  mainNav.classList.toggle('active');
+});
+
+// Close menu when clicking a nav link (on mobile)
+function closeMenu() {
+  hamburgerBtn.classList.remove('active');
+  mainNav.classList.remove('active');
+}
+
 // ===== Navigation =====
 const navLinks = document.querySelectorAll('.nav-link');
 const sections = document.querySelectorAll('.section');
@@ -49,26 +59,29 @@ function showSection(sectionId) {
   sections.forEach(section => {
     section.classList.remove('active');
   });
-  
+
   // Remove active class from all nav links
   navLinks.forEach(link => {
     link.classList.remove('active');
   });
-  
+
   // Show target section
   const targetSection = document.getElementById(sectionId);
   if (targetSection) {
     targetSection.classList.add('active');
   }
-  
+
   // Add active class to corresponding nav link
   const activeLink = document.querySelector(`[data-section="${sectionId}"]`);
   if (activeLink) {
     activeLink.classList.add('active');
   }
-  
+
   // Update URL hash without scrolling
   history.pushState(null, null, `#${sectionId}`);
+
+  // Close mobile menu
+  closeMenu();
 }
 
 // Navigation click handlers

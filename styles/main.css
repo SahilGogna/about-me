@@ -75,18 +75,9 @@ a {
   gap: 0.5rem;
 }
 
-.theme-icon {
-  cursor: pointer;
-  font-size: 1rem;
-  transition: transform 0.3s ease;
-}
-
-.theme-icon:hover {
-  transform: rotate(20deg);
-}
-
 .nav {
   display: flex;
+  align-items: center;
   gap: 2rem;
 }
 
@@ -112,6 +103,90 @@ a {
   width: 100%;
   height: 2px;
   background-color: var(--text-primary);
+}
+
+/* Theme toggle button */
+.theme-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+.theme-toggle svg {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.3s ease;
+}
+
+.theme-toggle:hover svg {
+  transform: rotate(20deg);
+}
+
+/* Sun icon - visible in dark mode (to switch to light) */
+.icon-sun {
+  display: none;
+  color: #fbbf24;
+  stroke: #fbbf24;
+}
+
+/* Moon icon - visible in light mode (to switch to dark) */
+.icon-moon {
+  display: block;
+  color: var(--text-primary);
+  stroke: var(--text-primary);
+}
+
+/* In dark mode: show sun, hide moon */
+[data-theme="dark"] .icon-sun {
+  display: block;
+}
+
+[data-theme="dark"] .icon-moon {
+  display: none;
+}
+
+/* Hamburger menu button */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 24px;
+  height: 18px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  position: absolute;
+  right: 1.5rem;
+  z-index: 101;
+}
+
+.hamburger span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background-color: var(--text-primary);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+/* Hamburger animation when open */
+.hamburger.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
 }
 
 /* ===== Sections ===== */
@@ -366,15 +441,44 @@ a {
   }
 
   .logo {
+    position: static;
     font-size: 1.1rem;
   }
 
+  /* Show hamburger, hide nav by default */
+  .hamburger {
+    display: flex;
+  }
+
   .nav {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background-color: var(--bg-primary);
+    flex-direction: column;
+    padding: 1.5rem;
     gap: 1rem;
+    border-bottom: 1px solid var(--border);
+    transform: translateY(-100%);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .nav.active {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
   }
 
   .nav-link {
-    font-size: 0.875rem;
+    font-size: 1rem;
+    padding: 0.5rem 0;
+  }
+
+  .nav-link.active::after {
+    display: none;
   }
 
   .name {
@@ -388,19 +492,13 @@ a {
   .about-content {
     padding: 1rem;
   }
+
+  .section {
+    padding-top: 5rem;
+  }
 }
 
 @media (max-width: 480px) {
-  .header {
-    flex-direction: column;
-    gap: 1rem;
-    padding: 1rem;
-  }
-
-  .section {
-    padding-top: 8rem;
-  }
-
   .profile-image {
     width: 120px;
     height: 120px;
@@ -408,5 +506,10 @@ a {
 
   .social-icons {
     gap: 0.75rem;
+  }
+
+  .cta-btn {
+    min-width: 180px;
+    font-size: 0.875rem;
   }
 }
